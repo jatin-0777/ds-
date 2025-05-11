@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;  
+};
+void insertAtMiddle(struct Node** head_ref, int new_data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    if (new_node == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+    new_node->data = new_data;
+    new_node->next = NULL;
+
+    if (*head_ref == NULL) { // If the list is empty
+        *head_ref = new_node;
+        return;
+    }
+
+    struct Node* slow_ptr = *head_ref;
+    struct Node* fast_ptr = *head_ref;
+    struct Node* prev_slow = NULL;
+
+    while (fast_ptr != NULL && fast_ptr->next != NULL) {
+        fast_ptr = fast_ptr->next->next;
+        prev_slow = slow_ptr;
+        slow_ptr = slow_ptr->next;
+    }
+
+    new_node->next = slow_ptr;
+    if (prev_slow != NULL) {
+        prev_slow->next = new_node;
+    } else {
+        *head_ref = new_node; 
+    }
+}
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+
+void freeList(struct Node* head) {
+    struct Node* tmp;
+    while (head != NULL) {
+        tmp = head;
+        head = head->next;
+        free(tmp);
+    }
+int main() {
+    struct Node* head = NULL;
+    insertAtMiddle(&head, 1);
+    insertAtMiddle(&head, 2);
+    insertAtMiddle(&head, 4);
+    insertAtMiddle(&head, 5);
+    printf("Linked list before insertion: \n");
+    printList(head);
+
+    insertAtMiddle(&head, 3);
+    printf("Linked list after insertion: \n");
+    printList(head);
+
+    freeList(head); // Free allocated memory
+    return 0;
+}
