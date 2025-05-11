@@ -1,0 +1,66 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+void insertEnd(struct Node** head_ref, int new_data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* last = *head_ref;
+    new_node->data = new_data;
+    new_node->next = NULL;
+    if (*head_ref == NULL) {
+        *head_ref = new_node;
+        return;
+    }
+    while (last->next != NULL)
+        last = last->next;
+    last->next = new_node;
+    return;
+}
+void deleteMiddle(struct Node** head_ref) {
+    if (*head_ref == NULL || (*head_ref)->next == NULL) {
+        free(*head_ref);
+        *head_ref = NULL;
+        return;
+    }
+    struct Node* slow_ptr = *head_ref;
+    struct Node* fast_ptr = *head_ref;
+    struct Node* prev = NULL;
+
+    while (fast_ptr != NULL && fast_ptr->next != NULL) {
+        fast_ptr = fast_ptr->next->next;
+        prev = slow_ptr;
+        slow_ptr = slow_ptr->next;
+    }
+    prev->next = slow_ptr->next;
+    free(slow_ptr);
+}
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    insertEnd(&head, 1);
+    insertEnd(&head, 2);
+    insertEnd(&head, 3);
+    insertEnd(&head, 4);
+    insertEnd(&head, 5);
+
+    printf("Linked list before deletion: ");
+    printList(head);
+
+    deleteMiddle(&head);
+
+    printf("Linked list after deletion of middle element: ");
+    printList(head);
+
+    return 0;
+}
