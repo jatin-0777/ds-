@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100
+
+int queue[MAX_SIZE];
+int front = -1;
+int rear = -1;
+int isEmpty() {
+  return front == -1;
+}
+void dequeue() {
+  if (isEmpty()) {
+    printf("Queue is empty. Cannot delete element.\n");
+    return;
+  }
+  printf("Deleted element: %d\n", queue[front]);
+  if (front == rear) { // If only one element in queue
+    front = rear = -1;
+  } else {
+    front++;
+  }
+}
+void display() {
+  if (isEmpty()) {
+    printf("Queue is empty.\n");
+    return;
+  }
+  printf("Queue elements: ");
+  for (int i = front; i <= rear; i++) {
+    printf("%d ", queue[i]);
+  }
+  printf("\n");
+}
+int main() {
+    queue[++rear] = 10;
+    if (front == -1) front = 0;
+    queue[++rear] = 20;
+    queue[++rear] = 30;
+
+    printf("Initial ");
+    display(); 
+
+    dequeue();
+    printf("After first deletion ");
+    display(); 
+
+    dequeue();
+    printf("After second deletion ");
+    display(); 
+
+    dequeue();
+    printf("After third deletion ");
+    display(); 
+    
+    dequeue(); 
+    return 0;
+}
